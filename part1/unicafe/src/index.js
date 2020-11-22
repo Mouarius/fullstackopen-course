@@ -53,29 +53,6 @@ const App = () => {
     setNumberBad(numberBad + 1)
   }
 
-  const calculatePositive = (good, neutral, bad) => {
-    if (good + neutral + bad !== 0){
-      return(good/(good+neutral+bad)*100)
-    }
-    return 0
-  }
-
-  const addGood = () => {
-    setNumberGood(numberGood + 1)
-    setNumberAverage(calculateAverage(numberGood +1, numberNeutral, numberBad)) // We need to add 1 to numberGood because on calling setNumberGood(numberGood+1) the re-render is only cued and so when we call setNumberAverage, the numberGood value hasn't been updated
-    setNumberPositive(calculatePositive(numberGood+1, numberNeutral, numberBad))
-  }
-  const addNeutral = () => {
-    setNumberNeutral(numberNeutral + 1)
-    setNumberAverage(calculateAverage(numberGood, numberNeutral+1, numberBad))
-    setNumberPositive(calculatePositive(numberGood, numberNeutral+1, numberBad))
-
-  }
-  const addBad = () => {
-    setNumberBad(numberBad + 1)
-    setNumberAverage(calculateAverage(numberGood, numberNeutral, numberBad+1))
-    setNumberPositive(calculatePositive(numberGood, numberNeutral, numberBad+1))
-  }
 
   return(
     <div>
