@@ -1,17 +1,46 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+const Stats = ({numbers}) => {
+  const [numberGood, numberNeutral, numberBad] = numbers
+  return(
+    <div>
+      <h1>Statistics</h1>
+      <p>good : {numberGood}</p>
+        <p>neutral : {numberNeutral}</p>
+        <p>bad : {numberBad}</p>
+    </div>
+  )
+}
+
+const Button = ({clickHandler, text}) => (
+  <button onClick={clickHandler}>{text}</button>
+)
+
+const App = () => {
+  const [numberGood, setNumberGood] = useState(0);
+  const [numberNeutral, setNumberNeutral] = useState(0);
+  const [numberBad, setNumberBad] = useState(0);
+
+  const addGood = () => (setNumberGood(numberGood + 1))
+  const addNeutral = () => (setNumberNeutral(numberNeutral + 1))
+  const addBad = () => (setNumberBad(numberBad + 1))
+
+
+  return(
+    <div>
+      <h1>give feedback</h1>
+      <Button clickHandler={addGood} text={"good"}/>
+      <Button clickHandler={addNeutral} text={"neutral"}/>
+      <Button clickHandler={addBad} text={"bad"}/>
+
+      <Stats numbers = {[numberGood, numberNeutral, numberBad]}/>
+    </div>
+  )
+
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
