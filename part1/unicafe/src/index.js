@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 
+const Statistic = ({text, value}) => {
+  const percent = (text==="positive")?" %":"";
+  return(
+    <p>{text} : {value}{percent}</p>
+  )
+}
+
 const Statistics = ({numbers}) => {
   const [numberGood, numberNeutral, numberBad] = numbers
 
@@ -28,12 +35,12 @@ const Statistics = ({numbers}) => {
     return(
       <div>
         <h1>Statistics</h1>
-        <p>good : {numberGood}</p>
-        <p>neutral : {numberNeutral}</p>
-        <p>bad : {numberBad}</p>
-        <p>all : {all}</p>
-        <p>average : {average}</p>
-        <p>positive : {positive} %</p>
+        <Statistic text="good" value={numberGood}/>
+        <Statistic text="neutral" value={numberNeutral}/>
+        <Statistic text="bad" value={numberBad}/>
+        <Statistic text="all" value={all}/>
+        <Statistic text="average" value={average}/>
+        <Statistic text="positive" value={positive}/>
       </div>
     )
   }
