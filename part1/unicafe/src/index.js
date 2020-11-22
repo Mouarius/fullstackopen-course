@@ -16,18 +16,28 @@ const Statistics = ({numbers}) => {
   if (all !== 0){
     positive = (numberGood)/all*100
   }
-
-  return(
-    <div>
-      <h1>Statistics</h1>
-      <p>good : {numberGood}</p>
-      <p>neutral : {numberNeutral}</p>
-      <p>bad : {numberBad}</p>
-      <p>all : {all}</p>
-      <p>average : {average}</p>
-      <p>positive : {positive} %</p>
-    </div>
-  )
+  if(all === 0){
+    return(
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback has been given yet.</p>
+      </div>
+      
+    )
+  }else{
+    return(
+      <div>
+        <h1>Statistics</h1>
+        <p>good : {numberGood}</p>
+        <p>neutral : {numberNeutral}</p>
+        <p>bad : {numberBad}</p>
+        <p>all : {all}</p>
+        <p>average : {average}</p>
+        <p>positive : {positive} %</p>
+      </div>
+    )
+  }
+  
 }
 
 const Button = ({clickHandler, text}) => (
