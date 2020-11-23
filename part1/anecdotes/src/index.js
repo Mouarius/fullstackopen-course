@@ -8,6 +8,16 @@ const App = (props) => {
   const [points, setPoints] = useState(Array(numberAnecdotes).fill(0))
   console.log("points : ", points)
 
+  var best = 0
+  var max = 0
+  for (let i =0; i< numberAnecdotes ; i++){
+    if(max < points[i]){
+      max = points[i]
+      best = i
+    }
+  }
+
+  
 
   const randomAnecdote = () => {
     const random = Math.floor(Math.random()*(numberAnecdotes))
@@ -23,9 +33,14 @@ const App = (props) => {
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <button onClick={randomAnecdote}>next anectode</button>
       <button onClick={addPoint}>vote</button>
+
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[best]}</p>
+
 
     </div>
   )
