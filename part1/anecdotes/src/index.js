@@ -17,8 +17,6 @@ const App = (props) => {
     }
   }
 
-  
-
   const randomAnecdote = () => {
     const random = Math.floor(Math.random()*(numberAnecdotes))
     setSelected(random)
@@ -29,7 +27,6 @@ const App = (props) => {
     copy[selected]+=1
     return(setPoints(copy))
   }
-
 
   return (
     <div>
