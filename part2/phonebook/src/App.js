@@ -1,4 +1,8 @@
 import React, { useState } from 'react'
+import Filter from './components/Filter'
+import Submit from './components/Submit'
+import Numbers from './components/Numbers'
+
 
 const App = () => {
   //------    COMPONENT STATES    ------//
@@ -12,27 +16,8 @@ const App = () => {
   const [ newPhone, setNewPhone ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
 
-  //------    PERSONS FILTERING PROCESS    ------//
-  
-  const personsToShow = [] //Create an empty array to contain the objects of persons to show, we need to declare it empty at each new state render to ensure that we only show the current filtervalue
-
-  for(let i = 0 ; i < persons.length ; i++){
-
-    //LOG DEVELOPPEMENT TESTS
-    /* console.log(`persons[${i}] :>> `, persons[i].name.toLowerCase());
-    console.log('includes a >>', persons[i].name.toLowerCase().includes('a')); */
-
-    if (persons[i].name.toLowerCase().includes(filterValue.toLowerCase())){ //Compares the values of lower case name property of deach person in persons, with the actual filter value (lower case as well)
-      personsToShow.push(persons[i])//If there is a match, we push the person to the persons to show array
-      console.log('Render the person :', persons[i].name);
-    }
-  }
-  //const personsToShow = personsLowerCase.filter(person => person.name.includes(filterValue.toLowerCase()))
-  console.log('Persons to show -> ', personsToShow)
-
 
   //------    EVENT HANDLERS    ------//
-
   const handleFilterChange = (event) => {
     console.log('Filter -> ', event.target.value)
     setFilterValue(event.target.value)
@@ -66,34 +51,10 @@ const App = () => {
 
     <div>
       <h2>Phonebook</h2>
-      Filter by name : <input onChange={handleFilterChange} type="text"/>
-      <form onSubmit={addPerson}>
-        <ul>
-            <li>
-                <label htmlFor="name">Name :</label>
-                <input onChange={handleNameChange} type='text' id='name' value={newName}/>
-            </li>
-            <li>
-                <label htmlFor="phone">Phone :</label>
-                <input onChange={handlePhoneChange} type='phone' id='phone' value={newPhone}/>
-            </li>
-        </ul>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter onChangeHandler={handleFilterChange}/>
+      <Submit onSubmitHandler={addPerson} phoneChangeHandler={handlePhoneChange} nameChangeHandler={handleNameChange} nameValue={newName} phoneValue={newPhone}/>
       <h2>Numbers</h2>
-      <table>
-          <tbody>
-            {personsToShow.map(person => 
-            <tr key={person.name}>
-                <td>{person.name}</td>
-                <td>{person.phone}</td>
-            </tr>
-            )}
-          </tbody>
-          
-      </table>
+      <Numbers persons={persons} filterValue={filterValue}/>
     </div>
 
   )
