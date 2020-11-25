@@ -14,8 +14,13 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    console.log('Submitted the value : ', newName);
-    setPersons(persons.concat({name: newName}))
+    if (persons.map(person => person.name).includes(newName)) {
+        console.log(`The entered name ${newName} already exists.`);
+        alert(`${newName} already exists !`)
+    }else{
+        console.log('Submitted the value : ', newName);
+        setPersons(persons.concat({name: newName}))
+    }
   }
 
   return (
