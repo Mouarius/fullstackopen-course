@@ -1,4 +1,6 @@
 .DS_Store
 fullstackopen-course.code-workspace
 **/.eslintcache
-tests
+part0
+part1
+part2
