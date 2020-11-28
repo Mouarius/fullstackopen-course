@@ -3,5 +3,13 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"extensions": {
+		"recommendations": []
+	},
+	"settings": {
+		"files.associations": {
+			"*.js": "javascriptreact"
+		}
+	}
 }
