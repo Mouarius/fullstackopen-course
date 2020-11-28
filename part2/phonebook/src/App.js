@@ -1,21 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Submit from './components/Submit'
 import Numbers from './components/Numbers'
+import axios from 'axios'
 
 
 const App = () => {
   //------    COMPONENT STATES    ------//
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', phone: '040-123456' },
-    { name: 'Ada Lovelace', phone: '39-44-5323523' },
-    { name: 'Dan Abramov', phone: '12-43-234345' },
-    { name: 'Mary Poppendieck', phone: '39-23-6423122' }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newPhone, setNewPhone ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
 
+  useEffect(() => {
+    console.log('Fetching contacts from server...')
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("Successfully retrieved users from server :", response.data)
+      setPersons(response.data)
+    })
+  },[])
 
   //------    EVENT HANDLERS    ------//
   const handleFilterChange = (event) => {
