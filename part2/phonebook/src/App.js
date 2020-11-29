@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Submit from './components/Submit'
-import Numbers from './components/Numbers'
-import axios from 'axios'
+import Persons from './components/Persons'
+import personsServices from './services/personsServices'
 
 
 const App = () => {
@@ -12,14 +12,11 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
 
-  const baseUrl = 'http://localhost:3001/persons'
-
   useEffect(() => {
     console.log('Fetching contacts from server...')
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("Successfully retrieved users from server :", response.data)
-      setPersons(response.data)
-    })
+    personsServices
+      .getAll()
+      .then(personsFromServer => setPersons(personsFromServer))
   },[])
 
   //------    EVENT HANDLERS    ------//
@@ -49,10 +46,10 @@ const App = () => {
     }else{
         console.log('Submitted the value : ', newName);
         const newPerson = {name: newName, number: newNumber}
-        axios
-          .post(baseUrl, newPerson)
-          .then(response => {
-            setPersons(persons.concat(response.data))
+        personsServices
+          .create(newPerson)
+          .then(addedPerson =>{
+            setPersons(persons.concat(addedPerson))
             console.log(`Successfully added ${newPerson.name} with the number ${newPerson.number}`);
             setNewName('')
             setNewNumber('')
@@ -72,8 +69,8 @@ const App = () => {
         nameValue={newName} 
         phoneValue={newNumber}
       />
-      <h2>Numbers</h2>
-      <Numbers 
+      <h2>Persons</h2>
+      <Persons 
         persons={persons} 
         filterValue={filterValue}
       />
