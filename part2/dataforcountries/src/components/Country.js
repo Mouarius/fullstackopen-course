@@ -1,26 +1,45 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const Country = (props) => {
-    const country = props.country[0] //because the country recieved is a table of country, we extract the first element which is a country object
-    console.log('country :>> ', country);
-    console.log('country.languages :>> ', country.languages);
-    return (
-        <section>
-            <h1>{country.name}</h1>
-            <p>Capital : {country.capital}</p>
-            <p>Population : {country.population}</p>
+    const [isVisible, setVisible] = useState(false)
 
-            <h2>Languages</h2>
+    const toggleVisibility = () =>{
+        if(isVisible){
+            setVisible(false)
+        }else{
+            setVisible(true)
+        }
+    }
 
-            <ul>
-                {country.languages.map((language) => 
-                    <li key={language}>{language}</li>
-                )}
-            </ul>
+    const country = props.country
+    // console.log('country :>> ', country);
+    // console.log('country.languages :>> ', country.languages);
 
-            <img Style="width : 20%" src = {country.flag} alt={"Flag of "+country.name}></img>
-        </section>
-    );
+    if(isVisible){
+        return (
+            <section>
+                <h2>{country.name} <button onClick={toggleVisibility}>hide</button></h2>
+                <p>Capital : {country.capital}</p>
+                <p>Population : {country.population}</p>
+    
+                <h2>Languages</h2>
+    
+                <ul>
+                    {country.languages.map((language) => 
+                        <li key={language}>{language}</li>
+                    )}
+                </ul>
+    
+                <img width='20%' src = {country.flag} alt={"Flag of "+country.name}></img>
+            </section>
+        );
+    }else{
+        return(
+            <h2>{country.name} <button onClick={toggleVisibility}>show</button></h2>
+        )
+
+    }
+    
 };
 
 export default Country;

@@ -36,7 +36,12 @@ const App = () => {
     return(
     <div>
         <Filter filterChangeHandler={handleFilterChange}/>
-        {countryToShow.length === 1 ? <Country country={countryToShow}/>  : <div>Too many countries to show, try to refine your research</div>}
+        {countryToShow.length === 1 
+            ? <Country country={countryToShow[0]}/>  
+            : countryToShow.map(country => 
+                <Country key={country.name} country={country}/>
+            )
+        }
     </div>)
 }
 export default App
