@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Persons = ({persons, filterValue}) => {
+const Persons = ({persons, filterValue, deletePersonHandler}) => {
     //------    PERSONS FILTERING PROCESS    ------//
   const personsToShow = [] //Create an empty array to contain the objects of persons to show, we need to declare it empty at each new state render to ensure that we only show the current filtervalue
 
@@ -26,6 +26,7 @@ const Persons = ({persons, filterValue}) => {
             <tr key={person.name}>
                 <td>{person.name}</td>
                 <td>{person.number}</td>
+                <td><button onClick={() => deletePersonHandler(person.id)}>delete</button></td>
             </tr>
             )}
           </tbody>

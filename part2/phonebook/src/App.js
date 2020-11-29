@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Submit from './components/Submit'
 import Persons from './components/Persons'
-import personsServices from './services/personsServices'
+import personService from './services/persons'
 
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
 
   useEffect(() => {
     console.log('Fetching contacts from server...')
-    personsServices
+    personService
       .getAll()
       .then(personsFromServer => setPersons(personsFromServer))
   },[])
@@ -37,7 +37,6 @@ const App = () => {
   //------    ADD PERSON BUTTON HANDLER    ------//
 
   const addPerson = (event) => {
-
     event.preventDefault()
 
     if (persons.map(person => person.name).includes(newName)) {
@@ -46,7 +45,7 @@ const App = () => {
     }else{
         console.log('Submitted the value : ', newName);
         const newPerson = {name: newName, number: newNumber}
-        personsServices
+        personService
           .create(newPerson)
           .then(addedPerson =>{
             setPersons(persons.concat(addedPerson))
@@ -54,6 +53,20 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+    }
+  }
+
+  const removePerson = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+    console.log('personToDelete :>> ', personToDelete);
+    const confirmation = window.confirm(`Are you sure you want to delete ${personToDelete.name} from your contacts ?`)
+    console.log('confirmation :>> ', confirmation);
+    if (confirmation){
+      personService
+      .remove(personToDelete)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
     }
   }
   //------    RETURN FIELD OF THE COMPONENT    ------//
@@ -73,6 +86,7 @@ const App = () => {
       <Persons 
         persons={persons} 
         filterValue={filterValue}
+        deletePersonHandler={removePerson}
       />
     </div>
 
