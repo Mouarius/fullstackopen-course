@@ -9,8 +9,10 @@ const App = () => {
   //------    COMPONENT STATES    ------//
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
-  const [ newPhone, setNewPhone ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
+
+  const baseUrl = 'http://localhost:3001/persons'
 
   useEffect(() => {
     console.log('Fetching contacts from server...')
@@ -32,7 +34,7 @@ const App = () => {
   }
   const handlePhoneChange = (event) => {
     console.log('Current phone value : ->' , event.target.value)
-    setNewPhone(event.target.value)
+    setNewNumber(event.target.value)
   }
 
   //------    ADD PERSON BUTTON HANDLER    ------//
@@ -46,7 +48,15 @@ const App = () => {
         alert(`${newName} already exists !`)
     }else{
         console.log('Submitted the value : ', newName);
-        setPersons(persons.concat({name: newName, phone: newPhone}))
+        const newPerson = {name: newName, number: newNumber}
+        axios
+          .post(baseUrl, newPerson)
+          .then(response => {
+            setPersons(persons.concat(response.data))
+            console.log(`Successfully added ${newPerson.name} with the number ${newPerson.number}`);
+            setNewName('')
+            setNewNumber('')
+          })
     }
   }
   //------    RETURN FIELD OF THE COMPONENT    ------//
@@ -55,9 +65,18 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter onChangeHandler={handleFilterChange}/>
-      <Submit onSubmitHandler={addPerson} phoneChangeHandler={handlePhoneChange} nameChangeHandler={handleNameChange} nameValue={newName} phoneValue={newPhone}/>
+      <Submit 
+        onSubmitHandler={addPerson} 
+        phoneChangeHandler={handlePhoneChange} 
+        nameChangeHandler={handleNameChange} 
+        nameValue={newName} 
+        phoneValue={newNumber}
+      />
       <h2>Numbers</h2>
-      <Numbers persons={persons} filterValue={filterValue}/>
+      <Numbers 
+        persons={persons} 
+        filterValue={filterValue}
+      />
     </div>
 
   )

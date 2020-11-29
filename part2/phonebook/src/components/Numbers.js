@@ -16,7 +16,7 @@ const Numbers = ({persons, filterValue}) => {
     }
   }
   //const personsToShow = personsLowerCase.filter(person => person.name.includes(filterValue.toLowerCase()))
-  console.log('Persons to show -> ', personsToShow)
+  //console.log('Persons to show -> ', personsToShow)
 
   //ISSUE : This type of filtering generates a new iteration of the array at each global state change (even when the filter hasn't changed for example) which is useless and can require many coputational resources.
     return (
@@ -25,7 +25,7 @@ const Numbers = ({persons, filterValue}) => {
             {personsToShow.map(person => 
             <tr key={person.name}>
                 <td>{person.name}</td>
-                <td>{person.phone}</td>
+                <td>{person.number}</td>
             </tr>
             )}
           </tbody>
