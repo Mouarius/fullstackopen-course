@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Numbers = ({persons, filterValue}) => {
+const Persons = ({persons, filterValue}) => {
     //------    PERSONS FILTERING PROCESS    ------//
   const personsToShow = [] //Create an empty array to contain the objects of persons to show, we need to declare it empty at each new state render to ensure that we only show the current filtervalue
 
@@ -33,4 +33,4 @@ const Numbers = ({persons, filterValue}) => {
     );
 };
 
-export default Numbers;
+export default Persons;
