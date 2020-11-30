@@ -38,13 +38,31 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    const newPerson = {name: newName, number: newNumber}
 
     if (persons.map(person => person.name).includes(newName)) {
         console.log(`The entered name ${newName} already exists.`);
-        alert(`${newName} already exists !`)
+        const personToModify = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
+        const confirmation = window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one ?`)
+
+        if(confirmation){
+          personService
+            .update(personToModify, newPerson)
+            .then((modifiedPerson) =>{
+              const modifiedPersonList = [...persons] //Create a shallow copy of persons to further change is with the new modofied person
+              modifiedPersonList.forEach(person => {
+                if (person.name.toLowerCase() === modifiedPerson.name.toLowerCase()){
+                  person.number = modifiedPerson.number
+                }
+              })
+              setPersons(modifiedPersonList)
+              setNewName('')
+              setNewNumber('')
+            })
+        }
+        
     }else{
         console.log('Submitted the value : ', newName);
-        const newPerson = {name: newName, number: newNumber}
         personService
           .create(newPerson)
           .then(addedPerson =>{

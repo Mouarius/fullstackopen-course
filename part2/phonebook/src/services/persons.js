@@ -17,10 +17,16 @@ const remove = (person) => {
   return request.then(() => console.log(`${person.name} has been removed successfully !`))
 }
 
+const update = (personToModify, newPerson) => {
+  const request = axios.put(`${baseUrl}/${personToModify.id}`, newPerson)
+  return request.then(response => response.data)
+}
+
 const personService = {
   getAll,
   create,
-  remove
+  remove,
+  update
 }
 
 export default personService
