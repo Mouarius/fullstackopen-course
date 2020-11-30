@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Submit from './components/Submit'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 
@@ -11,6 +12,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
+  const [ notificationMessage, setNotificationMessage ] = useState(null)
 
   useEffect(() => {
     console.log('Fetching contacts from server...')
@@ -34,6 +36,12 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const displayNotification = (notificationType, message) => {
+    setNotificationMessage({notificationType,message})
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  }
   //------    ADD PERSON BUTTON HANDLER    ------//
 
   const addPerson = (event) => {
@@ -55,6 +63,7 @@ const App = () => {
                   person.number = modifiedPerson.number
                 }
               })
+              displayNotification('info',`Successfully modified ${newPerson.name} with the new number ${newPerson.number}`);
               setPersons(modifiedPersonList)
               setNewName('')
               setNewNumber('')
@@ -62,17 +71,18 @@ const App = () => {
         }
         
     }else{
-        console.log('Submitted the value : ', newName);
         personService
           .create(newPerson)
           .then(addedPerson =>{
             setPersons(persons.concat(addedPerson))
-            console.log(`Successfully added ${newPerson.name} with the number ${newPerson.number}`);
+            displayNotification('info',`Successfully added ${newPerson.name} with the number ${newPerson.number}`);
             setNewName('')
             setNewNumber('')
           })
     }
   }
+
+  //------    REMOVE PERSON BUTTON HANDLER    ------//
 
   const removePerson = (id) => {
     const personToDelete = persons.find(person => person.id === id)
@@ -84,14 +94,21 @@ const App = () => {
       .remove(personToDelete)
       .then(() => {
         setPersons(persons.filter(person => person.id !== id))
+        console.log('Deleted');
+        displayNotification('info', `${personToDelete.name} has been removed from your contacts.`)
       })
     }
   }
+
+
   //------    RETURN FIELD OF THE COMPONENT    ------//
   return (
 
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <button onClick={() => displayNotification('error', 'TEST ERROR')}>display error</button>
+      <button onClick={() => displayNotification('info', 'TEST INFO')}>display info</button>
+      <Notification message={notificationMessage}/>
       <Filter onChangeHandler={handleFilterChange}/>
       <Submit 
         onSubmitHandler={addPerson} 
