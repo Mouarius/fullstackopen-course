@@ -6,13 +6,19 @@ import Filter from './components/Filter'
 const App = () => {
     const [filter, setFilter] = useState('')
     const [countries, setCountries] = useState([])
+    const [countryToShow, setCountryToShow] = useState(null)
 
-    const countryToShow = countries.filter(country => country.nameLowerCase.includes(filter.toLowerCase()))
-    console.log('countryToShow :>> ', countryToShow);
+    const filteredCountries = countries.filter(country => country.nameLowerCase.includes(filter.toLowerCase()))
 
     const handleFilterChange = (event) => {
         console.log('Filter value -> ', event.target.value);
         setFilter(event.target.value)
+        setCountryToShow(null)
+    }
+
+    const showCountryInfo = (country) => {
+        console.log('Actually showing the country : ' + country.name);
+        setCountryToShow(country)
     }
     useEffect(()=>{
         axios
@@ -33,15 +39,18 @@ const App = () => {
         )
     },[])
 
+
     return(
     <div>
         <Filter filterChangeHandler={handleFilterChange}/>
-        {countryToShow.length === 1 
-            ? <Country country={countryToShow[0]}/>  
-            : countryToShow.map(country => 
-                <Country key={country.name} country={country}/>
+        <ul>
+            {filteredCountries.length <=10 
+            ? filteredCountries.map(country => 
+                    <li key={country.name}>{country.name} <button onClick={() => showCountryInfo(country)}>show</button></li>
             )
-        }
+            : null}
+        </ul>
+        <Country country={countryToShow}/>
     </div>)
 }
 export default App
