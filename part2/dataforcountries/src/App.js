@@ -7,8 +7,12 @@ const App = () => {
     const [filter, setFilter] = useState('')
     const [countries, setCountries] = useState([])
     const [countryToShow, setCountryToShow] = useState(null)
+    const [weather, setWeather] = useState(null)
 
     const filteredCountries = countries.filter(country => country.nameLowerCase.includes(filter.toLowerCase()))
+
+    const api_key = process.env.REACT_APP_WEATHER_API_KEY
+    const baseUrlWeather = "http://api.weatherstack.com/current"
 
     const handleFilterChange = (event) => {
         console.log('Filter value -> ', event.target.value);
@@ -17,8 +21,14 @@ const App = () => {
     }
 
     const showCountryInfo = (country) => {
-        console.log('Actually showing the country : ' + country.name);
-        setCountryToShow(country)
+        axios
+            .get(`${baseUrlWeather}?access_key=${api_key}&query=${country.capital}`)
+            .then((response) => {
+                console.log(response.data);
+                setWeather(response.data)
+                console.log('Actually showing the country : ' + country.name);
+                setCountryToShow(country)
+            })
     }
     useEffect(()=>{
         axios
@@ -50,7 +60,7 @@ const App = () => {
             )
             : null}
         </ul>
-        <Country country={countryToShow}/>
+        <Country country={countryToShow} weather={weather}/>
     </div>)
 }
 export default App
