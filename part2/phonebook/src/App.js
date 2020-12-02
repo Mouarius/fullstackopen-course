@@ -68,6 +68,10 @@ const App = () => {
               setNewName('')
               setNewNumber('')
             })
+            .catch(error => {
+              displayNotification('error', `The contact ${personToModify.name} has already been deleted from the server.`)
+              setPersons(persons.filter(person => person.name.toLowerCase() !== personToModify.name.toLowerCase()))
+            })
         }
         
     }else{
@@ -86,9 +90,7 @@ const App = () => {
 
   const removePerson = (id) => {
     const personToDelete = persons.find(person => person.id === id)
-    console.log('personToDelete :>> ', personToDelete);
     const confirmation = window.confirm(`Are you sure you want to delete ${personToDelete.name} from your contacts ?`)
-    console.log('confirmation :>> ', confirmation);
     if (confirmation){
       personService
       .remove(personToDelete)
@@ -106,9 +108,9 @@ const App = () => {
 
     <div>
       <h1>Phonebook</h1>
-      <button onClick={() => displayNotification('error', 'TEST ERROR')}>display error</button>
-      <button onClick={() => displayNotification('info', 'TEST INFO')}>display info</button>
+      
       <Notification message={notificationMessage}/>
+      
       <Filter onChangeHandler={handleFilterChange}/>
       <Submit 
         onSubmitHandler={addPerson} 
