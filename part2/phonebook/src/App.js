@@ -19,6 +19,9 @@ const App = () => {
     personService
       .getAll()
       .then(personsFromServer => setPersons(personsFromServer))
+      .catch(error => {
+        console.log(error.response.data)
+      })
   },[])
 
   //------    EVENT HANDLERS    ------//
@@ -70,6 +73,7 @@ const App = () => {
             })
             .catch(error => {
               displayNotification('error', `The contact ${personToModify.name} has already been deleted from the server.`)
+              console.log(error.response.data)
               setPersons(persons.filter(person => person.name.toLowerCase() !== personToModify.name.toLowerCase()))
             })
         }
@@ -82,6 +86,10 @@ const App = () => {
             displayNotification('info',`Successfully added ${newPerson.name} with the number ${newPerson.number}`);
             setNewName('')
             setNewNumber('')
+          })
+          .catch(error => {
+            displayNotification('error', JSON.stringify(error.response.data.error))
+            console.log(error.response.data)
           })
     }
   }
