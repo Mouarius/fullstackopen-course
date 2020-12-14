@@ -50,11 +50,12 @@ const App = () => {
 		event.preventDefault()
 		const newPerson = { name: newName, number: newNumber }
 
+		//first the case if the person already exists, try to update it
 		if (persons.map((person) => person.name).includes(newName)) {
 			console.log(`The entered name ${newName} already exists.`)
 			const personToModify = persons.find((person) => person.name.toLowerCase() === newPerson.name.toLowerCase())
 			const confirmation = window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one ?`)
-
+			//ask the user for confirmation
 			if (confirmation) {
 				personService
 					.update(personToModify, newPerson)
@@ -71,13 +72,17 @@ const App = () => {
 						setNewNumber('')
 					})
 					.catch((error) => {
-						// var errors = [...error]
-						// errors.forEach((errorObject) => {
-						// 	displayNotification('error', errorObject.error)
-						// })
-						// displayNotification('error', `The contact ${personToModify.name} has already been deleted from the server.`)
-						// console.log(error.error.data)
-						// setPersons(persons.filter((person) => person.name.toLowerCase() !== personToModify.name.toLowerCase()))
+						if(error.response.data.error === 'malformatted id'){
+							//the case when when we try to modify data that has been deleted from the server
+							displayNotification('error', "The person doesn't exist")
+							setPersons(persons.filter(person => person.name.toLowerCase() !== newPerson.name.toLowerCase()))
+							setNewName('')
+							setNewNumber('')
+							
+						}else{
+							displayNotification('error', error.response.data.error)
+						}
+						console.log(error.response.data)
 					})
 			}
 		} else {
@@ -90,8 +95,8 @@ const App = () => {
 					setNewNumber('')
 				})
 				.catch((error) => {
-					displayNotification('error', JSON.stringify(error))
-					console.log(error.error)
+					displayNotification('error', error.response.data.error)
+					console.log(error.response.data)
 				})
 		}
 	}
