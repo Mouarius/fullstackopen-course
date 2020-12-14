@@ -23,7 +23,7 @@ const Persons = ({persons, filterValue, deletePersonHandler}) => {
         <table>
           <tbody>
             {personsToShow.map(person => 
-            <tr key={person.name}>
+            <tr key={person.id}>
                 <td>{person.name}</td>
                 <td>{person.number}</td>
                 <td><button onClick={() => deletePersonHandler(person.id)}>delete</button></td>
