@@ -12,7 +12,7 @@ const Persons = ({persons, filterValue, deletePersonHandler}) => {
 
     if (persons[i].name.toLowerCase().includes(filterValue.toLowerCase())){ //Compares the values of lower case name property of deach person in persons, with the actual filter value (lower case as well)
       personsToShow.push(persons[i])//If there is a match, we push the person to the persons to show array
-      console.log('Render the person :', persons[i].name);
+      //console.log('Render the person :', persons[i].name);
     }
   }
   //const personsToShow = personsLowerCase.filter(person => person.name.includes(filterValue.toLowerCase()))

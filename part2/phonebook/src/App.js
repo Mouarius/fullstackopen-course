@@ -19,7 +19,7 @@ const App = () => {
 			.getAll()
 			.then((personsFromServer) => setPersons(personsFromServer))
 			.catch((error) => {
-				console.log(error.response.data)
+				console.log(error.error.data)
 			})
 	}, [])
 
@@ -50,16 +50,17 @@ const App = () => {
 		event.preventDefault()
 		const newPerson = { name: newName, number: newNumber }
 
+		//first the case if the person already exists, try to update it
 		if (persons.map((person) => person.name).includes(newName)) {
 			console.log(`The entered name ${newName} already exists.`)
 			const personToModify = persons.find((person) => person.name.toLowerCase() === newPerson.name.toLowerCase())
 			const confirmation = window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one ?`)
-
+			//ask the user for confirmation
 			if (confirmation) {
 				personService
 					.update(personToModify, newPerson)
 					.then((modifiedPerson) => {
-						const modifiedPersonList = [...persons] //Create a shallow copy of persons to further change it with the new modofied person
+						const modifiedPersonList = [...persons] //Create a shallow copy of persons to further change is with the new modofied person
 						modifiedPersonList.forEach((person) => {
 							if (person.name.toLowerCase() === modifiedPerson.name.toLowerCase()) {
 								person.number = modifiedPerson.number
@@ -71,17 +72,17 @@ const App = () => {
 						setNewNumber('')
 					})
 					.catch((error) => {
-						//because the error object in case of validation error in backend is not the same as the error object that we send normally wich is {error: "some message..."}
-						const errorMessage = error.response.data.message ? error.response.data.message : error.response.data.error
-						const isValidationError = error.response.data.message ? true : false
-
-						displayNotification('error', JSON.stringify(errorMessage))
-						console.log(errorMessage)
-
-						if (!isValidationError) {
-							// This is the case of another error, when we want to modify a person that ha been deleted from the server
-							setPersons(persons.filter((person) => person.name.toLowerCase() !== personToModify.name.toLowerCase()))
+						if(error.response.data.error === 'malformatted id'){
+							//the case when when we try to modify data that has been deleted from the server
+							displayNotification('error', "The person doesn't exist")
+							setPersons(persons.filter(person => person.name.toLowerCase() !== newPerson.name.toLowerCase()))
+							setNewName('')
+							setNewNumber('')
+							
+						}else{
+							displayNotification('error', error.response.data.error)
 						}
+						console.log(error.response.data)
 					})
 			}
 		} else {
@@ -94,10 +95,8 @@ const App = () => {
 					setNewNumber('')
 				})
 				.catch((error) => {
-					//because the error object in case of validation error in backend is not the same as the error object that we send normally wich is {error: "some message..."}
-					const errorMessage = error.response.data.message ? error.response.data.message : error.response.data.error
-					displayNotification('error', JSON.stringify(errorMessage))
-					console.log(errorMessage)
+					displayNotification('error', error.response.data.error)
+					console.log(error.response.data)
 				})
 		}
 	}
